@@ -4,16 +4,20 @@ use wasm_bindgen_test::{wasm_bindgen_test, wasm_bindgen_test_configure};
 
 wasm_bindgen_test_configure!(run_in_browser);
 
+fn add(a: i32, b: i32) -> i32 {
+    a + b
+}
+
 // This runs a unit test in native Rust, so it can only use Rust APIs.
 #[test]
 fn rust_test() {
-    assert_eq!(1, 1);
+    assert_eq!(add(1, 2), 3);
 }
 
 // This runs a unit test in the browser, so it can use browser APIs.
 #[wasm_bindgen_test]
 fn web_test() {
-    assert_eq!(1, 1);
+    assert_eq!(add(1, 2), 3);
 }
 
 // This runs a unit test in the browser, and in addition it supports asynchronous Future APIs.
