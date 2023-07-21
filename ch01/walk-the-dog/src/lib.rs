@@ -41,7 +41,7 @@ fn sierpinski(
     color: (u8, u8, u8),
     depth: u8,
 ) {
-    draw_triangle(&context, points, color);
+    draw_triangle(context, points, color);
     let mut rng = thread_rng();
 
     let next_color = (
