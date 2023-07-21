@@ -1,6 +1,9 @@
-on: [push]
+on:
+  push:
+    paths:
+      - 'ch01/**'
 
-name: ci
+name: Chapter 1 CI
 
 jobs:
   build:
