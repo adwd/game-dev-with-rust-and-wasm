@@ -1,4 +1,3 @@
-use rand::{thread_rng, Rng};
 use serde::Deserialize;
 use std::{collections::HashMap, rc::Rc, sync::Mutex};
 use wasm_bindgen::prelude::*;
@@ -61,13 +60,13 @@ pub fn main_js() -> Result<(), JsValue> {
 
         let callback = Closure::once(move || {
             if let Some(success_tx) = success_tx.lock().ok().and_then(|mut opt| opt.take()) {
-                success_tx.send(Ok(()));
+                success_tx.send(Ok(())).unwrap();
             }
         });
 
         let error_callback = Closure::once(move |err| {
             if let Some(error_tx) = error_tx.lock().ok().and_then(|mut opt| opt.take()) {
-                error_tx.send(Err(err));
+                error_tx.send(Err(err)).unwrap();
             }
         });
 
@@ -75,7 +74,7 @@ pub fn main_js() -> Result<(), JsValue> {
         image.set_onerror(Some(error_callback.as_ref().unchecked_ref()));
         image.set_src("rhb.png");
 
-        success_rx.await;
+        success_rx.await.unwrap().unwrap();
 
         let mut frame = -1;
         let interval_callback = Closure::wrap(Box::new(move || {
