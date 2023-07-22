@@ -25,12 +25,31 @@ pub fn main_js() -> Result<(), JsValue> {
         .dyn_into::<web_sys::CanvasRenderingContext2d>()
         .unwrap();
 
-    sierpinski(
-        &context,
-        [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)],
-        (0, 255, 0),
-        5,
-    );
+    wasm_bindgen_futures::spawn_local(async move {
+        let (success_tx, success_rx) = futures::channel::oneshot::channel::<()>();
+        let image = web_sys::HtmlImageElement::new().unwrap();
+
+        let callback = Closure::once(move || {
+            web_sys::console::log_1(&JsValue::from_str("loaded"));
+            success_tx.send(()).unwrap();
+        });
+
+        image.set_onload(Some(callback.as_ref().unchecked_ref()));
+        image.set_src("Idle (1).png");
+
+        success_rx.await.unwrap();
+
+        context
+            .draw_image_with_html_image_element(&image, 0.0, 0.0)
+            .unwrap();
+
+        sierpinski(
+            &context,
+            [(300.0, 0.0), (0.0, 600.0), (600.0, 600.0)],
+            (0, 255, 0),
+            5,
+        );
+    });
 
     Ok(())
 }
