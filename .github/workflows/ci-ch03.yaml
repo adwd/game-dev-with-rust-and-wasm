@@ -1,16 +1,16 @@
 on:
   push:
     paths:
-      - 'ch02/**'
+      - 'ch03/**'
 
-name: Chapter 2 CI
+name: Chapter 3 CI
 
 jobs:
   build:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: ch02/walk-the-dog
+        working-directory: ch03/walk-the-dog
     steps:
       - uses: actions/checkout@v3
       - uses: dtolnay/rust-toolchain@stable
