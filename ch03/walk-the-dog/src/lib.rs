@@ -1,6 +1,6 @@
-use anyhow::{anyhow, Result};
+use anyhow::Result;
 use serde::Deserialize;
-use std::{collections::HashMap, rc::Rc, sync::Mutex};
+use std::collections::HashMap;
 use wasm_bindgen::prelude::*;
 use web_sys::console;
 
