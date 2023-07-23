@@ -7,7 +7,7 @@ use web_sys::HtmlImageElement;
 
 use crate::{
     browser,
-    engine::{self, Game, Rect, Renderer},
+    engine::{self, Game, KeyState, Rect, Renderer},
 };
 
 pub struct WalkTheDog {
@@ -43,7 +43,7 @@ impl Game for WalkTheDog {
         }))
     }
 
-    fn update(&mut self) {
+    fn update(&mut self, keystate: &KeyState) {
         if self.frame < 23 {
             self.frame += 1;
         } else {
