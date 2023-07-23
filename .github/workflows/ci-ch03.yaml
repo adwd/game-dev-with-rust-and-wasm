@@ -5,6 +5,10 @@ on:
 
 name: Chapter 3 CI
 
+# Make sure CI fails on all warnings, including Clippy lints
+env:
+  RUSTFLAGS: '-Dwarnings'
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -20,10 +24,7 @@ jobs:
           components: clippy
       - name: Install
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - name: Annotate commit with clippy warnings
-        run: cargo clippy --all-targets --all-features -- -D warnings
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - run: cargo clippy --all-targets --all-features
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
