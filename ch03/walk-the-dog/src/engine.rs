@@ -179,7 +179,7 @@ impl KeyState {
     }
 
     pub fn is_pressed(&self, code: &str) -> bool {
-        self.pressed_keys.contains_key(code.into())
+        self.pressed_keys.contains_key(code)
     }
 
     fn set_pressed(&mut self, code: &str, event: web_sys::KeyboardEvent) {
@@ -187,7 +187,7 @@ impl KeyState {
     }
 
     fn set_released(&mut self, code: &str) {
-        self.pressed_keys.remove(code.into());
+        self.pressed_keys.remove(code);
     }
 }
 
