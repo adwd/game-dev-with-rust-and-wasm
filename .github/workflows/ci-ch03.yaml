@@ -20,10 +20,10 @@ jobs:
           components: clippy
       - name: Install
         run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-      - name: Annotate commit with clippy warnings
-        run: cargo clippy --all-targets --all-features -- -D warnings
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - uses: giraffate/clippy-action@v1
+        with:
+          reporter: 'github-pr-review'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
       - uses: actions/setup-node@v3
         with:
           node-version: 16.x
