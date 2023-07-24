@@ -48,6 +48,12 @@ pub trait Game {
     fn draw(&self, context: &Renderer);
 }
 
+#[derive(Debug, Clone, Copy)]
+pub struct Point {
+    pub x: i16,
+    pub y: i16,
+}
+
 const FRAME_SIZE: f32 = 1.0 / 60.0 * 1000.0;
 
 pub struct GameLoop {
