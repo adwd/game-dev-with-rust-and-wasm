@@ -1,0 +1,33 @@
+on:
+  push:
+    paths:
+      - 'ch05/**'
+
+name: Chapter 45 CI
+
+# Make sure CI fails on all warnings, including Clippy lints
+env:
+  RUSTFLAGS: '-Dwarnings'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ch05/walk-the-dog
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: 1.71.0
+          target: wasm32-unknown-unknown
+          components: clippy
+      - name: Install
+        run: curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+      - run: cargo clippy --all-targets --all-features
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16.x
+      - run: npm install
+      - run: npm run test
+      - run: npm run build
