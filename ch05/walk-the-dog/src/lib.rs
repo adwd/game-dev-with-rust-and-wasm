@@ -4,7 +4,7 @@ mod engine;
 mod game;
 
 use engine::GameLoop;
-use game::WalkTheDog;
+use game::walk_the_dog::WalkTheDog;
 use wasm_bindgen::prelude::*;
 
 // This is like the `main` function, except for JavaScript.
