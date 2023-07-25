@@ -14,13 +14,13 @@ const JUMP_SPEED: i16 = -25;
 const GRAVITY: i16 = 1;
 
 #[derive(Copy, Clone)]
-pub(crate) struct RedHatBoyState<S> {
+pub struct RedHatBoyState<S> {
     context: RedHatBoyContext,
     _state: S,
 }
 
 impl<S> RedHatBoyState<S> {
-    pub(crate) fn context(&self) -> &RedHatBoyContext {
+    pub fn context(&self) -> &RedHatBoyContext {
         &self.context
     }
 
@@ -33,7 +33,7 @@ impl<S> RedHatBoyState<S> {
 pub struct Idle;
 
 impl RedHatBoyState<Idle> {
-    pub(crate) fn new() -> Self {
+    pub fn new() -> Self {
         RedHatBoyState {
             context: RedHatBoyContext {
                 frame: 0,
@@ -44,16 +44,16 @@ impl RedHatBoyState<Idle> {
         }
     }
 
-    pub(crate) fn frame_name(&self) -> &str {
+    pub fn frame_name(&self) -> &str {
         IDLE_FRAME_NAME
     }
 
-    pub(crate) fn update(mut self) -> RedHatBoyState<Idle> {
+    pub fn update(mut self) -> RedHatBoyState<Idle> {
         self.update_context(IDLE_FRAMES);
         self
     }
 
-    pub(crate) fn run(self) -> RedHatBoyState<Running> {
+    pub fn run(self) -> RedHatBoyState<Running> {
         RedHatBoyState {
             context: self.context.reset_frame().run_right(),
             _state: Running {},
@@ -92,7 +92,7 @@ impl RedHatBoyState<Running> {
 #[derive(Copy, Clone)]
 pub struct Jumping;
 
-pub(crate) enum JumpingEndState {
+pub enum JumpingEndState {
     Jumping(RedHatBoyState<Jumping>),
     Landing(RedHatBoyState<Running>),
 }
@@ -123,17 +123,17 @@ impl RedHatBoyState<Jumping> {
 #[derive(Copy, Clone)]
 pub struct Sliding;
 
-pub(crate) enum SlidingEndState {
+pub enum SlidingEndState {
     Sliding(RedHatBoyState<Sliding>),
     Running(RedHatBoyState<Running>),
 }
 
 impl RedHatBoyState<Sliding> {
-    pub(crate) fn frame_name(&self) -> &str {
+    pub fn frame_name(&self) -> &str {
         SLIDING_FRAME_NAME
     }
 
-    pub(crate) fn update(mut self) -> SlidingEndState {
+    pub fn update(mut self) -> SlidingEndState {
         self.update_context(SLIDING_FRAMES);
 
         if self.context.frame >= SLIDING_FRAMES {
@@ -143,7 +143,7 @@ impl RedHatBoyState<Sliding> {
         }
     }
 
-    pub(crate) fn stand(self) -> RedHatBoyState<Running> {
+    pub fn stand(self) -> RedHatBoyState<Running> {
         RedHatBoyState {
             context: self.context.reset_frame(),
             _state: Running {},

@@ -1,7 +1,7 @@
 use super::red_hat_boy_states::*;
 
 #[derive(Copy, Clone)]
-pub(crate) enum RedHatBoyStateMachine {
+pub enum RedHatBoyStateMachine {
     Idle(RedHatBoyState<Idle>),
     Running(RedHatBoyState<Running>),
     Sliding(RedHatBoyState<Sliding>),
@@ -16,7 +16,7 @@ pub enum Event {
 }
 
 impl RedHatBoyStateMachine {
-    pub(crate) fn transition(self, event: Event) -> Self {
+    pub fn transition(self, event: Event) -> Self {
         match (self, event) {
             (RedHatBoyStateMachine::Idle(state), Event::Run) => state.run().into(),
             (RedHatBoyStateMachine::Running(state), Event::Jump) => state.jump().into(),
@@ -29,7 +29,7 @@ impl RedHatBoyStateMachine {
         }
     }
 
-    pub(crate) fn frame_name(&self) -> &str {
+    pub fn frame_name(&self) -> &str {
         match self {
             RedHatBoyStateMachine::Idle(state) => state.frame_name(),
             RedHatBoyStateMachine::Running(state) => state.frame_name(),
@@ -38,7 +38,7 @@ impl RedHatBoyStateMachine {
         }
     }
 
-    pub(crate) fn context(&self) -> &RedHatBoyContext {
+    pub fn context(&self) -> &RedHatBoyContext {
         match self {
             RedHatBoyStateMachine::Idle(state) => state.context(),
             RedHatBoyStateMachine::Running(state) => state.context(),
@@ -47,7 +47,7 @@ impl RedHatBoyStateMachine {
         }
     }
 
-    pub(crate) fn update(self) -> Self {
+    pub fn update(self) -> Self {
         self.transition(Event::Update)
     }
 }
