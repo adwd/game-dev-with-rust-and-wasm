@@ -3,7 +3,7 @@ on:
     paths:
       - 'ch05/**'
 
-name: Chapter 45 CI
+name: Chapter 5 CI
 
 # Make sure CI fails on all warnings, including Clippy lints
 env:
