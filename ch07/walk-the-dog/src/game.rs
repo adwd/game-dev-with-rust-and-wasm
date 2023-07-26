@@ -497,7 +497,7 @@ mod red_hat_boy_states {
             self.update_context(JUMPING_FRAMES);
 
             if self.context.position.y >= FLOOR {
-                JumpingEndState::Landing(self.land_on(HEIGHT.into()))
+                JumpingEndState::Landing(self.land_on(HEIGHT))
             } else {
                 JumpingEndState::Jumping(self)
             }
@@ -734,14 +734,16 @@ impl Game for WalkTheDog {
     async fn initialize(&self) -> Result<Box<dyn Game>> {
         match self {
             WalkTheDog::Loading => {
-                let sheet = browser::fetch_json("rhb.json").await?.into_serde()?;
+                let js_value = browser::fetch_json("rhb.json").await?;
+                let sheet: Sheet = serde_wasm_bindgen::from_value(js_value).unwrap();
                 let background = engine::load_image("BG.png").await?;
                 let stone = engine::load_image("Stone.png").await?;
 
-                let tiles = browser::fetch_json("tiles.json").await?;
+                let js_value = browser::fetch_json("tiles.json").await?;
+                let tiles: Sheet = serde_wasm_bindgen::from_value(js_value).unwrap();
 
                 let sprite_sheet = Rc::new(SpriteSheet::new(
-                    tiles.into_serde::<Sheet>()?,
+                    tiles,
                     engine::load_image("tiles.png").await?,
                 ));
 
@@ -832,10 +834,11 @@ impl Game for WalkTheDog {
     }
 }
 
+#[allow(clippy::ptr_arg)]
 fn rightmost(obstacle_list: &Vec<Box<dyn Obstacle>>) -> i16 {
     obstacle_list
         .iter()
         .map(|obstacle| obstacle.right())
-        .max_by(|x, y| x.cmp(&y))
+        .max_by(|x, y| x.cmp(y))
         .unwrap_or(0)
 }
