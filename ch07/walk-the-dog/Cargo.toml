@@ -23,33 +23,41 @@ lto = true
 [dependencies]
 # The `wasm-bindgen` crate provides the bare minimum functionality needed
 # to interact with JavaScript.
-wasm-bindgen = { version = "0.2.78", features = ["serde-serialize"] }
+wasm-bindgen = { version = "0.2.87", features = ["serde-serialize"] }
 
 console_error_panic_hook = "0.1.7"
-rand = "0.8.4"
-getrandom = { version = "0.2.3", features = ["js"] }
-futures = "0.3.17"
-wasm-bindgen-futures = "0.4.28"
-serde = {version = "1.0.131", features = ["derive"] }
-anyhow = "1.0.51"
-async-trait = "0.1.52"
+rand = "0.8.5"
+getrandom = { version = "0.2.10", features = ["js"] }
+futures = "0.3.28"
+wasm-bindgen-futures = "0.4.37"
+serde = { version = "1.0.175", features = ["derive"] }
+anyhow = "1.0.72"
+async-trait = "0.1.72"
+serde-wasm-bindgen = "0.5.0"
 
 # The `web-sys` crate allows you to interact with the various browser APIs,
 # like the DOM.
 [dependencies.web-sys]
-version = "0.3.55"
-features = ["console",
-           "Window",
-           "Document",
-           "HtmlCanvasElement",
-           "CanvasRenderingContext2d",
-           "Element",
-           "HtmlImageElement",
-           "Response",
-           "Performance",
-           "KeyboardEvent"]
+version = "0.3.64"
+features = [
+    "console",
+    "Window",
+    "Document",
+    "HtmlCanvasElement",
+    "CanvasRenderingContext2d",
+    "Element",
+    "HtmlImageElement",
+    "Response",
+    "Performance",
+    "KeyboardEvent",
+    "AudioContext",
+    "AudioBuffer",
+    "AudioBufferSourceNode",
+    "AudioDestinationNode",
+    "AudioNode",
+]
 
 # These crates are used for running unit tests.
 [dev-dependencies]
-wasm-bindgen-test = "0.3.28"
-js-sys = "0.3.55"
+wasm-bindgen-test = "0.3.37"
+js-sys = "0.3.64"

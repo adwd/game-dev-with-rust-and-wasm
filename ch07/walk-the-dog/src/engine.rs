@@ -101,7 +101,7 @@ impl Renderer {
     pub fn draw_image(&self, image: &HtmlImageElement, frame: &Rect, destination: &Rect) {
         self.context
             .draw_image_with_html_image_element_and_sw_and_sh_and_dx_and_dy_and_dw_and_dh(
-                &image,
+                image,
                 frame.x().into(),
                 frame.y().into(),
                 frame.width.into(),
@@ -120,6 +120,7 @@ impl Renderer {
             .expect("Drawing is throwing exceptions! Unrecoverable error.");
     }
 
+    #[allow(dead_code)]
     pub fn draw_rect(&self, bounding_box: &Rect) {
         self.context.set_stroke_style(&JsValue::from_str("#FF0000"));
         self.context.begin_path();
@@ -141,13 +142,15 @@ pub async fn load_image(source: &str) -> Result<HtmlImageElement> {
     let error_tx = Rc::clone(&success_tx);
     let success_callback = browser::closure_once(move || {
         if let Some(success_tx) = success_tx.lock().ok().and_then(|mut opt| opt.take()) {
-            success_tx.send(Ok(()));
+            success_tx.send(Ok(())).unwrap();
         }
     });
 
     let error_callback: Closure<dyn FnMut(JsValue)> = browser::closure_once(move |err| {
         if let Some(error_tx) = error_tx.lock().ok().and_then(|mut opt| opt.take()) {
-            error_tx.send(Err(anyhow!("Error Loading Image: {:#?}", err)));
+            error_tx
+                .send(Err(anyhow!("Error Loading Image: {:#?}", err)))
+                .unwrap();
         }
     });
 
@@ -204,7 +207,7 @@ impl GameLoop {
             game_loop.last_frame = perf;
             game.draw(&renderer);
 
-            browser::request_animation_frame(f.borrow().as_ref().unwrap());
+            browser::request_animation_frame(f.borrow().as_ref().unwrap()).unwrap();
         }));
 
         browser::request_animation_frame(
@@ -236,7 +239,7 @@ impl KeyState {
     }
 
     fn set_released(&mut self, code: &str) {
-        self.pressed_keys.remove(code.into());
+        self.pressed_keys.remove(code);
     }
 }
 
@@ -265,13 +268,15 @@ fn prepare_input() -> Result<UnboundedReceiver<KeyPress>> {
     let onkeydown = browser::closure_wrap(Box::new(move |keycode: web_sys::KeyboardEvent| {
         keydown_sender
             .borrow_mut()
-            .start_send(KeyPress::KeyDown(keycode));
+            .start_send(KeyPress::KeyDown(keycode))
+            .unwrap();
     }) as Box<dyn FnMut(web_sys::KeyboardEvent)>);
 
     let onkeyup = browser::closure_wrap(Box::new(move |keycode: web_sys::KeyboardEvent| {
         keyup_sender
             .borrow_mut()
-            .start_send(KeyPress::KeyUp(keycode));
+            .start_send(KeyPress::KeyUp(keycode))
+            .unwrap();
     }) as Box<dyn FnMut(web_sys::KeyboardEvent)>);
 
     browser::canvas()?.set_onkeydown(Some(onkeydown.as_ref().unchecked_ref()));
